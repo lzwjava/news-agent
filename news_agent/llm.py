@@ -66,6 +66,13 @@ def build_llm(settings) -> tuple[object | None, str]:
     if not model:
         return None, f"no model configured for provider '{provider}'"
     try:
-        return _make(provider, model, base_url, key), ""
+        chat = _make(provider, model, base_url, key)
     except Exception as exc:  # pragma: no cover - import/config errors
         return None, f"failed to init chat model: {exc}"
+    # resolve the auto-detected provider/model back into settings so that
+    # logging and the digest metadata show what actually ran
+    try:
+        settings.provider, settings.model = provider, model
+    except Exception:  # pragma: no cover - settings passed as a plain dict
+        pass
+    return chat, ""

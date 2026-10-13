@@ -292,6 +292,7 @@ def render(state: AgentState) -> dict:
         "rss": out_dir / "feed.xml",
         "latest_html": out_dir / "index.html",
         "latest_markdown": out_dir / "digest.md",
+        "latest_json": out_dir / "digest.json",
     }
 
     markdown = render_markdown(state, digest, stats)
@@ -301,6 +302,7 @@ def render(state: AgentState) -> dict:
     files["html"].write_text(page, encoding="utf-8")
     files["latest_html"].write_text(page, encoding="utf-8")
     files["json"].write_text(render_json(state, digest, stats), encoding="utf-8")
+    files["latest_json"].write_text(render_json(state, digest, stats), encoding="utf-8")
     files["rss"].write_text(render_rss(digest), encoding="utf-8")
 
     return {"outputs": {key: str(path) for key, path in files.items()}}
