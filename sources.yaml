@@ -1,0 +1,187 @@
+# News source registry for the agent.
+#
+# type: rss   -> RSS/Atom feed (parsed with feedparser)
+# type: html  -> scraping adapter for sites without a feed (CSS selectors)
+#
+# category decides which digest section the items land in:
+#   labs | research | community | media
+# weight is the ranking prior (higher = trusted/more relevant).
+
+sources:
+  # ---------------------------------------------------------------- labs
+  - id: openai
+    name: OpenAI News
+    url: https://openai.com/news/rss.xml
+    type: rss
+    category: labs
+    weight: 3.0
+    home: https://openai.com/news
+
+  - id: anthropic-news
+    name: Anthropic News
+    url: https://www.anthropic.com/news
+    type: html
+    category: labs
+    weight: 3.0
+    home: https://www.anthropic.com
+    anchor: 'a[href^="/news/"]'
+    link_pattern: '^/news/[a-z0-9-]+/?$'
+    title: '[class*="__title"], [class*="featuredTitle"]'
+    date: 'time'
+    tag: '[class*="__subject"]'
+    max_items: 30
+
+  - id: anthropic-research
+    name: Anthropic Research
+    url: https://www.anthropic.com/research
+    type: html
+    category: research
+    weight: 3.0
+    home: https://www.anthropic.com
+    anchor: 'a[href^="/research/"]'
+    link_pattern: '^/research/[a-z0-9-]+/?$'
+    title: '[class*="__title"], [class*="featuredTitle"]'
+    date: 'time'
+    tag: '[class*="__subject"]'
+    max_items: 30
+
+  - id: deepmind
+    name: Google DeepMind
+    url: https://deepmind.google/blog/rss.xml
+    type: rss
+    category: labs
+    weight: 3.0
+    home: https://deepmind.google/blog/
+
+  - id: mistral
+    name: Mistral AI
+    url: https://mistral.ai/rss.xml
+    type: rss
+    category: labs
+    weight: 2.5
+    home: https://mistral.ai/news/
+
+  - id: huggingface
+    name: Hugging Face Blog
+    url: https://huggingface.co/blog/feed.xml
+    type: rss
+    category: labs
+    weight: 2.0
+    home: https://huggingface.co/blog
+
+  # ------------------------------------------------------------- research
+  - id: simonwillison
+    name: Simon Willison's Weblog
+    url: https://simonwillison.net/atom/everything/
+    type: rss
+    category: research
+    weight: 2.0
+    home: https://simonwillison.net/
+
+  - id: latent-space
+    name: Latent Space
+    url: https://www.latent.space/feed
+    type: rss
+    category: research
+    weight: 1.8
+    home: https://www.latent.space/
+
+  - id: import-ai
+    name: Import AI
+    url: https://importai.substack.com/feed
+    type: rss
+    category: research
+    weight: 1.5
+    home: https://importai.substack.com/
+
+  - id: microsoft-research
+    name: Microsoft Research
+    url: https://www.microsoft.com/en-us/research/feed/
+    type: rss
+    category: research
+    weight: 1.5
+    home: https://www.microsoft.com/en-us/research/
+
+  # ------------------------------------------------------------ community
+  - id: hacker-news
+    name: Hacker News
+    url: https://news.ycombinator.com/rss
+    type: rss
+    category: community
+    weight: 2.0
+    home: https://news.ycombinator.com/
+    max_items: 40
+    # Front page is general interest; keep only AI/ML stories.
+    keywords:
+      [ai, a.i., llm, gpt, claude, gemini, llama, openai, anthropic, deepmind,
+       "machine learning", "deep learning", neural, transformer, diffusion,
+       "stable diffusion", agents, agent, rag, inference, gpu, gpus, chatbot,
+       reasoning, agi, "open weights", open-weight, transformers, datasets,
+       hugging, fine-tune, finetune, "context window", multimodal]
+
+  - id: yc-blog
+    name: Y Combinator Blog
+    url: https://www.ycombinator.com/blog/rss
+    type: rss
+    category: community
+    weight: 2.5
+    home: https://www.ycombinator.com/blog
+
+  - id: last-week-in-ai
+    name: Last Week in AI
+    url: https://lastweekin.ai/feed
+    type: rss
+    category: community
+    weight: 1.5
+    home: https://lastweekin.ai/
+
+  # ---------------------------------------------------------------- media
+  - id: techcrunch-ai
+    name: TechCrunch AI
+    url: https://techcrunch.com/category/artificial-intelligence/feed/
+    type: rss
+    category: media
+    weight: 1.8
+    home: https://techcrunch.com/category/artificial-intelligence/
+
+  - id: the-verge-ai
+    name: The Verge AI
+    url: https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
+    type: rss
+    category: media
+    weight: 1.6
+    home: https://www.theverge.com/ai-artificial-intelligence
+
+  - id: ars-ai
+    name: Ars Technica AI
+    url: https://arstechnica.com/ai/feed/
+    type: rss
+    category: media
+    weight: 1.5
+    home: https://arstechnica.com/ai/
+
+  - id: mit-tr-ai
+    name: MIT Technology Review AI
+    url: https://www.technologyreview.com/topic/artificial-intelligence/feed
+    type: rss
+    category: media
+    weight: 1.5
+    home: https://www.technologyreview.com/topic/artificial-intelligence/
+
+  - id: ieee-spectrum-ai
+    name: IEEE Spectrum AI
+    url: https://spectrum.ieee.org/feeds/topic/artificial-intelligence.rss
+    type: rss
+    category: media
+    weight: 1.2
+    home: https://spectrum.ieee.org/topic/artificial-intelligence/
+
+  - id: venturebeat-ai
+    name: VentureBeat AI
+    url: https://venturebeat.com/category/ai/feed/
+    type: rss
+    category: media
+    weight: 1.2
+    home: https://venturebeat.com/category/ai/
+    # Cloudflare 429s non-browser clients on this host
+    user_agent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
